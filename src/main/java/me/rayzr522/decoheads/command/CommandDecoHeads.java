@@ -41,10 +41,6 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
 
         Player p = (Player) sender;
 
-        if (!plugin.checkPermission("use", p, true)) {
-            return true;
-        }
-
         if (args.length < 1) {
             // new HeadsGUI(p, 1, null).render();
             new CategoryGUI(p).render();
@@ -69,10 +65,6 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
                 gui.render();
             }
         } else if (sub.equals("get") && plugin.getSettings().isCustomHeadsEnabled()) {
-            if (!plugin.checkPermission("use.custom", p, true)) {
-                return true;
-            }
-
             if (args.length < 2) {
                 p.sendMessage(plugin.tr("command.decoheads.get.no-username"));
                 p.sendMessage(plugin.tr("command.decoheads.get.usage"));
@@ -85,12 +77,11 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
             ItemStack cost = plugin.getSettings().getCustomHeadsCost();
 
             if (plugin.getSettings().isPriceEnabled() && !ItemUtils.isInvalid(cost)) {
-                InventoryUtils eco = plugin.getEconomy();
-                if (eco.canPlayerAfford(p, cost)) {
+                if (InventoryUtils.canPlayerAfford(p, cost)) {
                     p.sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(cost)));
                     return true;
                 }
-                eco.withdrawPlayer(p, cost);
+                InventoryUtils.withdrawPlayer(p, cost);
                 p.sendMessage(plugin.tr("command.decoheads.get.given-cost", username, TextUtils.formatPrice(cost)));
             } else {
                 p.sendMessage(plugin.tr("command.decoheads.get.given", username));

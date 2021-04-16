@@ -3,6 +3,7 @@ package me.rayzr522.decoheads.gui;
 import me.rayzr522.decoheads.DecoHeads;
 import me.rayzr522.decoheads.data.Head;
 import me.rayzr522.decoheads.gui.system.*;
+import me.rayzr522.decoheads.util.InventoryUtils;
 import me.rayzr522.decoheads.util.ItemUtils;
 import me.rayzr522.decoheads.util.TextUtils;
 import org.bukkit.Material;
@@ -175,13 +176,13 @@ public class HeadsGUI extends GUI {
         DecoHeads plugin = DecoHeads.getInstance();
 
         if (head.hasCostFor(getPlayer()) && plugin.getSettings().isPriceEnabled()) {
-            if (plugin.getEconomy().canPlayerAfford(e.getPlayer(), head.computeCostFor(getPlayer()))) {
+            if (InventoryUtils.canPlayerAfford(e.getPlayer(), head.computeCostFor(getPlayer()))) {
                 e.setShouldClose(true);
                 e.getPlayer().sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
                 return;
             }
 
-            boolean transactionSuccess = plugin.getEconomy().withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
+            boolean transactionSuccess = InventoryUtils.withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
             if (!transactionSuccess) {
                 e.setShouldClose(true);
                 e.getPlayer().sendMessage(plugin.tr("price.failed", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));

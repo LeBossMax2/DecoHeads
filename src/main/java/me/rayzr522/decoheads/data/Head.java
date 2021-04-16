@@ -104,10 +104,6 @@ public class Head {
     }
 
     public ItemStack computeCostFor(Player player) {
-        if (DecoHeads.getInstance().checkPermission(String.format("free.%s", getInternalName()), player, false)) {
-            return new ItemStack(Material.AIR);
-        }
-
         return cost != null ? cost : DecoHeads.getInstance().getSettings().getDefaultHeadCost();
     }
 
@@ -117,7 +113,7 @@ public class Head {
     }
 
     public boolean isUseableBy(CommandSender sender) {
-        return isEnabled() && DecoHeads.getInstance().checkPermission(String.format("head.%s", getInternalName()), sender, false);
+        return isEnabled();
     }
 
     private String getInternalName() {

@@ -39,12 +39,12 @@ public class Settings {
 
     public boolean isPriceEnabled() {
         // Ensure price is not enabled when the price wrapper is not available
-        return plugin.getEconomy() != null && config.getBoolean("price.enabled");
+        return config.getBoolean("price.enabled");
     }
 
     public void setPriceEnabled(boolean priceEnabled) {
         // Ensure price is not enabled when the price wrapper is not available
-        config.set("price.enabled", plugin.getEconomy() != null && priceEnabled);
+        config.set("price.enabled", priceEnabled);
     }
 
     public boolean shouldShowFreeHeads() {

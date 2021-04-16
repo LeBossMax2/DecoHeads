@@ -7,11 +7,11 @@ import org.bukkit.inventory.ItemStack;
  * @author Rayzr522
  */
 public class InventoryUtils {
-    public boolean canPlayerAfford(Player player, ItemStack costStack) {
+    public static boolean canPlayerAfford(Player player, ItemStack costStack) {
     	return player.getInventory().containsAtLeast(costStack, costStack.getAmount());
     }
 
-    public boolean withdrawPlayer(Player player, ItemStack costStack) {
+    public static boolean withdrawPlayer(Player player, ItemStack costStack) {
     	if (!canPlayerAfford(player, costStack))
     		return false;
     	

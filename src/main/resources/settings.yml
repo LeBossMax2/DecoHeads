@@ -2,7 +2,9 @@ custom-heads:
     # Allow getting custom heads by username?
     enabled: true
     # The cost for custom heads that are retrieved by username.
-    cost: 0.0
+    cost:
+        type: DIAMOND
+        amount: 10
 
 price:
     # Use price?
@@ -10,7 +12,9 @@ price:
     # Show heads that have no cost?
     show-free-heads: false
     # Default cost for heads. This is used when the cost of a head is set to -1.
-    default-cost: 0.0
+    default-cost:
+        type: DIAMOND
+        amount: 1
 
 # Check for updates?
 updater-enabled: true

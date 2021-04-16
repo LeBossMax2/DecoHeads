@@ -73,7 +73,6 @@ public class HeadManager {
 
     public List<Head> getHeadsFor(CommandSender sender) {
         return heads.stream()
-                .filter(head -> head.getCategory().hasPermission(sender))
                 .filter(head -> head.isUseableBy(sender))
                 .collect(Collectors.toList());
     }

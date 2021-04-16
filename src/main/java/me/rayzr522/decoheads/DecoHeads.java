@@ -8,7 +8,6 @@ import me.rayzr522.decoheads.data.HeadManager;
 import me.rayzr522.decoheads.event.PlayerListener;
 import me.rayzr522.decoheads.gui.system.GUIListener;
 import me.rayzr522.decoheads.util.ConfigHandler;
-import me.rayzr522.decoheads.util.InventoryUtils;
 import me.rayzr522.decoheads.util.Reflector;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -26,7 +25,6 @@ public class DecoHeads extends JavaPlugin {
     private Localization localization;
     private HeadManager headManager;
 
-    private InventoryUtils economy;
     private SpigetUpdate updater;
 
     public static DecoHeads getInstance() {
@@ -110,10 +108,6 @@ public class DecoHeads extends JavaPlugin {
 
     public HeadManager getHeadManager() {
         return headManager;
-    }
-
-    public InventoryUtils getEconomy() {
-        return economy;
     }
 
     public boolean checkPermission(String permission, CommandSender sender, boolean sendMessage) {
