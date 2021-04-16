@@ -6,6 +6,9 @@ package me.rayzr522.decoheads.data;
 import me.rayzr522.decoheads.Category;
 import me.rayzr522.decoheads.DecoHeads;
 import me.rayzr522.decoheads.util.CustomHead;
+import me.rayzr522.decoheads.util.ItemUtils;
+
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -24,7 +27,7 @@ public class Head {
 
     private String texture;
     private String uuid;
-    private double cost;
+    private ItemStack cost;
 
     private boolean enabled;
 
@@ -38,11 +41,11 @@ public class Head {
 
         this.texture = config.getString("texture");
         this.uuid = config.getString("uuid", UUID.randomUUID().toString());
-        this.cost = config.getDouble("cost", -1);
+        this.cost = config.getItemStack("cost", null);
         this.enabled = config.getBoolean("enabled", true);
     }
 
-    public Head(String name, Category category, String texture, UUID uuid, double cost) {
+    public Head(String name, Category category, String texture, UUID uuid, ItemStack cost) {
         this.name = name;
         this.category = category;
         this.texture = texture;
@@ -92,24 +95,25 @@ public class Head {
         return uuid;
     }
 
-    public double getCost() {
+    public ItemStack getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(ItemStack cost) {
         this.cost = cost;
     }
 
-    public double computeCostFor(Player player) {
+    public ItemStack computeCostFor(Player player) {
         if (DecoHeads.getInstance().checkPermission(String.format("free.%s", getInternalName()), player, false)) {
-            return 0.0;
+            return new ItemStack(Material.AIR);
         }
 
-        return cost != -1 ? cost : DecoHeads.getInstance().getSettings().getDefaultHeadCost();
+        return cost != null ? cost : DecoHeads.getInstance().getSettings().getDefaultHeadCost();
     }
 
     public boolean hasCostFor(Player player) {
-        return computeCostFor(player) > 0.0;
+    	ItemStack s = computeCostFor(player);
+        return !ItemUtils.isInvalid(s);
     }
 
     public boolean isUseableBy(CommandSender sender) {

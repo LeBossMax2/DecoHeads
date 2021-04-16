@@ -2,6 +2,7 @@ package me.rayzr522.decoheads.util;
 
 import me.rayzr522.decoheads.DecoHeads;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 public class TextUtils {
 
@@ -36,7 +37,7 @@ public class TextUtils {
         return String.format("%.2f", number);
     }
 
-    public static String formatPrice(double price) {
-        return DecoHeads.getInstance().tr(false, "economy.price-format", formatDecimal(price));
+    public static String formatPrice(ItemStack price) {
+        return DecoHeads.getInstance().tr(false, "price.price-format", price.getType(), price.getAmount());
     }
 }

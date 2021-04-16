@@ -40,5 +40,20 @@ public class ItemUtils {
 
         return item;
     }
+    
+    public static ItemStack parseStack(String txt)
+    {
+    	String[] parts = txt.trim().split(" ");
+    	if (parts.length < 0 || parts.length > 2)
+    		return null;
+    	
+    	Material item = Material.matchMaterial(parts[0]);
+    	int count = 1;
+    	if (parts.length >= 2)
+    	{
+    		count = Integer.parseInt(parts[2]);
+    	}
+    	return new ItemStack(item, count);
+    }
 
 }

@@ -9,6 +9,7 @@ import me.rayzr522.decoheads.gui.SettingsGUI;
 import me.rayzr522.decoheads.util.ArrayUtils;
 import me.rayzr522.decoheads.util.Compat;
 import me.rayzr522.decoheads.util.CustomHead;
+import me.rayzr522.decoheads.util.ItemUtils;
 import me.rayzr522.decoheads.util.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -112,7 +113,7 @@ public class CommandDecoHeadsAdmin implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                // [1] = name, [2] = category [3] ?= cost
+                // [1] = name, [2] = category [3] ?= cost_item [4] ?= cost_amount
                 if (args.length < 3) {
                     player.sendMessage(plugin.tr("command.decoheadsadmin.add.usage"));
                     return true;
@@ -138,15 +139,26 @@ public class CommandDecoHeadsAdmin implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                double cost = -1.0;
+                Material itemType = Material.DIAMOND;
                 if (args.length > 3) {
-                    try {
-                        cost = Double.parseDouble(args[3]);
-                    } catch (NumberFormatException e) {
-                        player.sendMessage(plugin.tr("command.not-a-decimal", args[3]));
+                	itemType = Material.matchMaterial(args[3]);
+                    if (itemType == null) {
+                        player.sendMessage(plugin.tr("command.not-an-item", args[3]));
                         return true;
                     }
                 }
+                int count = 1;
+
+                if (args.length > 4) {
+                    try {
+                        count = Integer.parseInt(args[4]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(plugin.tr("command.not-a-number", args[4]));
+                        return true;
+                    }
+                }
+                
+                ItemStack cost = new ItemStack(itemType, count);
 
                 ItemStack item = Compat.getItemInHand(player);
                 if (item == null || item.getType() != Material.SKULL_ITEM) {
@@ -163,7 +175,7 @@ public class CommandDecoHeadsAdmin implements CommandExecutor, TabCompleter {
 
                 headManager.addHead(new Head(name, category, texture, UUID.randomUUID(), cost));
                 headManager.save();
-                if (cost > 0.0) {
+                if (!ItemUtils.isInvalid(cost)) {
                     player.sendMessage(plugin.tr("command.decoheadsadmin.add.added", name, category.name(), TextUtils.formatPrice(cost)));
                 } else {
                     player.sendMessage(plugin.tr("command.decoheadsadmin.add.added-free", name, category.name()));

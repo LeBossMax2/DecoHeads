@@ -1,7 +1,6 @@
 package me.rayzr522.decoheads.gui;
 
 import me.rayzr522.decoheads.DecoHeads;
-import me.rayzr522.decoheads.compat.EconomyWrapper;
 import me.rayzr522.decoheads.data.Head;
 import me.rayzr522.decoheads.gui.system.*;
 import me.rayzr522.decoheads.util.ItemUtils;
@@ -148,11 +147,11 @@ public class HeadsGUI extends GUI {
 
         DecoHeads plugin = DecoHeads.getInstance();
 
-        if (plugin.getSettings().isEconomyEnabled()) {
+        if (plugin.getSettings().isPriceEnabled()) {
             if (head.hasCostFor(getPlayer()) || plugin.getSettings().shouldShowFreeHeads()) {
                 String[] costLore = plugin.tr(false, "item.cost", head.hasCostFor(getPlayer())
                         ? TextUtils.formatPrice(head.computeCostFor(getPlayer()))
-                        : plugin.tr(false, "economy.free")).split("\n");
+                        : plugin.tr(false, "price.free")).split("\n");
 
                 ItemUtils.setLore(button.getItem(), costLore);
             }
@@ -175,17 +174,17 @@ public class HeadsGUI extends GUI {
     private void onClickHead(ClickEvent e, Head head) {
         DecoHeads plugin = DecoHeads.getInstance();
 
-        if (head.hasCostFor(getPlayer()) && plugin.getSettings().isEconomyEnabled()) {
-            if (plugin.getEconomy().getBalance(e.getPlayer()) < head.computeCostFor(getPlayer())) {
+        if (head.hasCostFor(getPlayer()) && plugin.getSettings().isPriceEnabled()) {
+            if (plugin.getEconomy().canPlayerAfford(e.getPlayer(), head.computeCostFor(getPlayer()))) {
                 e.setShouldClose(true);
-                e.getPlayer().sendMessage(plugin.tr("economy.not-enough-money", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
+                e.getPlayer().sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
                 return;
             }
 
-            EconomyWrapper.EconomyResponseWrapper response = plugin.getEconomy().withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
-            if (!response.transactionSuccess()) {
+            boolean transactionSuccess = plugin.getEconomy().withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
+            if (!transactionSuccess) {
                 e.setShouldClose(true);
-                e.getPlayer().sendMessage(plugin.tr("economy.failed", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
+                e.getPlayer().sendMessage(plugin.tr("price.failed", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
                 return;
             }
         }

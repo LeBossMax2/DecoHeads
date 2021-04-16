@@ -88,7 +88,7 @@ public class HeadEditorGUI extends GUI {
         );
 
         addComponent(makeSettingButton("price", Material.GOLD_NUGGET, new Dimension(6, 1),
-                e -> Conversations.getDouble(getPlayer(), getPrompt("price"), price -> {
+                e -> Conversations.getItemStack(getPlayer(), getPrompt("price"), price -> {
                     head.setCost(price);
                     plugin.save();
                     getPlayer().sendMessage(getSuccess("price", TextUtils.formatPrice(price)));

@@ -2,7 +2,10 @@ package me.rayzr522.decoheads.config;
 
 import me.rayzr522.decoheads.DecoHeads;
 import me.rayzr522.decoheads.util.ConfigVersionChecker;
+
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 
@@ -34,30 +37,30 @@ public class Settings {
         }
     }
 
-    public boolean isEconomyEnabled() {
-        // Ensure economy is not enabled when the economy wrapper is not available
-        return plugin.getEconomy() != null && config.getBoolean("economy.enabled");
+    public boolean isPriceEnabled() {
+        // Ensure price is not enabled when the price wrapper is not available
+        return plugin.getEconomy() != null && config.getBoolean("price.enabled");
     }
 
-    public void setEconomyEnabled(boolean economyEnabled) {
-        // Ensure economy is not enabled when the economy wrapper is not available
-        config.set("economy.enabled", plugin.getEconomy() != null && economyEnabled);
+    public void setPriceEnabled(boolean priceEnabled) {
+        // Ensure price is not enabled when the price wrapper is not available
+        config.set("price.enabled", plugin.getEconomy() != null && priceEnabled);
     }
 
     public boolean shouldShowFreeHeads() {
-        return config.getBoolean("economy.show-free-heads");
+        return config.getBoolean("price.show-free-heads");
     }
 
     public void setShowFreeHeads(boolean showFreeHeads) {
-        config.set("economy.show-free-heads", showFreeHeads);
+        config.set("price.show-free-heads", showFreeHeads);
     }
 
-    public double getDefaultHeadCost() {
-        return config.getDouble("economy.default-cost");
+    public ItemStack getDefaultHeadCost() {
+        return config.getItemStack("price.default-cost", new ItemStack(Material.DIAMOND));
     }
 
-    public void setDefaultHeadCost(double headCost) {
-        config.set("economy.default-cost", headCost);
+    public void setDefaultHeadCost(ItemStack headCost) {
+        config.set("price.default-cost", headCost);
     }
 
     public boolean isCustomHeadsEnabled() {
@@ -68,11 +71,11 @@ public class Settings {
         config.set("custom-heads.enabled", customHeadsEnabled);
     }
 
-    public double getCustomHeadsCost() {
-        return config.getDouble("custom-heads.cost");
+    public ItemStack getCustomHeadsCost() {
+        return config.getItemStack("custom-heads.cost");
     }
 
-    public void setCustomHeadsCost(double customHeadsCost) {
+    public void setCustomHeadsCost(ItemStack customHeadsCost) {
         config.set("custom-heads.cost", customHeadsCost);
     }
 

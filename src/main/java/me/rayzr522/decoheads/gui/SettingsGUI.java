@@ -22,9 +22,9 @@ public class SettingsGUI extends GUI {
     private static final List<Setting> SETTINGS = Arrays.asList(
             Setting.bool("custom-heads", settings -> settings.setCustomHeadsEnabled(!settings.isCustomHeadsEnabled()), Settings::isCustomHeadsEnabled),
             Setting.price("custom-heads-cost", Settings::setCustomHeadsCost, Settings::getCustomHeadsCost),
-            Setting.bool("economy", settings -> settings.setEconomyEnabled(!settings.isEconomyEnabled()), Settings::isEconomyEnabled),
+            Setting.bool("price", settings -> settings.setPriceEnabled(!settings.isPriceEnabled()), Settings::isPriceEnabled),
             Setting.bool("show-free-heads", settings -> settings.setShowFreeHeads(!settings.shouldShowFreeHeads()), Settings::shouldShowFreeHeads),
-            Setting.price("economy-default-cost", Settings::setDefaultHeadCost, Settings::getDefaultHeadCost),
+            Setting.price("price-default-cost", Settings::setDefaultHeadCost, Settings::getDefaultHeadCost),
             Setting.bool("updater-enabled", settings -> settings.setUpdaterEnabled(!settings.isUpdaterEnabled()), Settings::isUpdaterEnabled)
     );
 
@@ -79,14 +79,14 @@ public class SettingsGUI extends GUI {
             return new Setting(id, (settings, e) -> clickHandler.accept(settings), () -> stateProvider.apply(DecoHeads.getInstance().getSettings()) ? new ItemSettings(ChatColor.GREEN, Material.REDSTONE_BLOCK) : new ItemSettings(ChatColor.RED, Material.COAL_BLOCK));
         }
 
-        private static Setting price(String id, BiConsumer<Settings, Double> clickHandler, Function<Settings, Double> stateProvider) {
+        private static Setting price(String id, BiConsumer<Settings, ItemStack> clickHandler, Function<Settings, ItemStack> stateProvider) {
             DecoHeads plugin = DecoHeads.getInstance();
             return new Setting(
                     id,
                     (settings, e) -> {
                         e.setShouldClose(true);
                         e.getPlayer().closeInventory();
-                        Conversations.getDouble(e.getPlayer(), plugin.tr(String.format("gui.settings.%s.prompt", id)), value -> {
+                        Conversations.getItemStack(e.getPlayer(), plugin.tr(String.format("gui.settings.%s.prompt", id)), value -> {
                             clickHandler.accept(settings, value);
                             settings.save();
                             e.getGui().render();

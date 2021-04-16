@@ -6,6 +6,7 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -62,6 +63,24 @@ public class Conversations {
                 },
                 query -> DecoHeads.getInstance().tr("command.not-a-decimal", query),
                 Double::parseDouble,
+                callback
+        );
+    }
+
+    public static void getItemStack(Player player, String prompt, Consumer<ItemStack> callback) {
+        get(
+                player,
+                prompt,
+                query -> {
+                    try {
+                        ItemStack v = ItemUtils.parseStack(query);
+                        return v.equals(v); // essentially return true, but this way IntelliJ doesn't kill me
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                },
+                query -> DecoHeads.getInstance().tr("command.not-an-item", query),
+                ItemUtils::parseStack,
                 callback
         );
     }

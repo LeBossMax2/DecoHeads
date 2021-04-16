@@ -1,14 +1,14 @@
 package me.rayzr522.decoheads.command;
 
 import me.rayzr522.decoheads.DecoHeads;
-import me.rayzr522.decoheads.compat.EconomyWrapper;
 import me.rayzr522.decoheads.data.Head;
 import me.rayzr522.decoheads.gui.CategoryGUI;
 import me.rayzr522.decoheads.gui.HeadsGUI;
 import me.rayzr522.decoheads.util.ArrayUtils;
+import me.rayzr522.decoheads.util.InventoryUtils;
+import me.rayzr522.decoheads.util.ItemUtils;
 import me.rayzr522.decoheads.util.NamePredicate;
 import me.rayzr522.decoheads.util.TextUtils;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -83,12 +82,12 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
             String username = args[1];
             ItemStack skull = makeSkull(username);
 
-            double cost = plugin.getSettings().getCustomHeadsCost();
+            ItemStack cost = plugin.getSettings().getCustomHeadsCost();
 
-            if (plugin.getSettings().isEconomyEnabled() && cost > 0.0) {
-                EconomyWrapper eco = plugin.getEconomy();
-                if (eco.getBalance(p) < cost) {
-                    p.sendMessage(plugin.tr("economy.not-enough-money", TextUtils.formatPrice(cost)));
+            if (plugin.getSettings().isPriceEnabled() && !ItemUtils.isInvalid(cost)) {
+                InventoryUtils eco = plugin.getEconomy();
+                if (eco.canPlayerAfford(p, cost)) {
+                    p.sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(cost)));
                     return true;
                 }
                 eco.withdrawPlayer(p, cost);

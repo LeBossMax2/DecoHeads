@@ -4,8 +4,8 @@ custom-heads:
     # The cost for custom heads that are retrieved by username.
     cost: 0.0
 
-economy:
-    # Use economy?
+price:
+    # Use price?
     enabled: false
     # Show heads that have no cost?
     show-free-heads: false
