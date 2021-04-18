@@ -84,7 +84,7 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
                 }
             }
 
-            boolean giveSuccess = p.getInventory().addItem(skull).isEmpty();
+            boolean giveSuccess = InventoryUtils.giveItem(p, skull);
             if (giveSuccess) {
 	            if (priceEnable) {
 	                InventoryUtils.withdrawPlayer(p, cost);

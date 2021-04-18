@@ -198,7 +198,7 @@ public class HeadsGUI extends GUI {
             ItemUtils.setLore(giveItem, lore.split("\n"));
         }
 
-        boolean giveSuccess = e.getPlayer().getInventory().addItem(giveItem).isEmpty();
+        boolean giveSuccess = InventoryUtils.giveItem(e.getPlayer(), giveItem);
 
         if (giveSuccess && priceEnable) {
             InventoryUtils.withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));

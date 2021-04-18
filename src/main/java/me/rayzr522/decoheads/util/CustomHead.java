@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -85,5 +86,73 @@ public class CustomHead {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public static boolean isSkullSimilar(ItemStack s1, ItemStack s2) {
+    	if (s1.getType() != Material.SKULL_ITEM)
+    		return false;
+    	
+    	if (s1.getDurability() != s2.getDurability())
+    		return false;
+    	
+    	if (s1.getDurability() != (short)3)
+    		return s1.isSimilar(s2);
+    	
+    	SkullMeta m1 = (SkullMeta)s1.getItemMeta();
+    	SkullMeta m2 = (SkullMeta)s2.getItemMeta();
+    	if (m1.hasDisplayName() != m2.hasDisplayName())
+    		return false;
+    	
+    	if (m1.hasDisplayName() && !m1.getDisplayName().equals(m2.getDisplayName()))
+    		return false;
+
+    	if (m1.hasLocalizedName() != m2.hasLocalizedName())
+    		return false;
+    	
+    	if (m1.hasLocalizedName() && !m1.getLocalizedName().equals(m2.getLocalizedName()))
+    		return false;
+
+    	if (m1.hasLore() != m2.hasLore())
+    		return false;
+    	
+    	if (m1.hasLore()) {
+    		List<String> l1 = m1.getLore();
+    		List<String> l2 = m2.getLore();
+    		 if (l1.size() != l2.size())
+			 	return false;
+    		 for (int i = 0; i < l1.size(); i++) {
+    			 if (!l1.get(i).equals(l2.get(i)))
+    				 return false;
+    		 }
+    	}
+
+    	if (m1.hasEnchants() != m2.hasEnchants())
+    		return false;
+
+    	if (!m1.getItemFlags().containsAll(m2.getItemFlags()) ||
+    		!m2.getItemFlags().containsAll(m1.getItemFlags()))
+    		return false;
+
+    	if (m1.hasOwner() != m2.hasOwner())
+    		return false;
+    	
+    	if (m1.hasOwner()) {
+        	if (!m1.getOwningPlayer().equals(m2.getOwningPlayer()))
+        		return false;
+    	}
+    	
+        try
+		{
+        	Object p1 = Reflector.getFieldValue(m1, "profile");
+			Object p2 = Reflector.getFieldValue(m2, "profile");
+			if (!p1.equals(p2))
+				return false;
+		}
+		catch (NoSuchFieldException | IllegalAccessException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+        return true;
     }
 }
