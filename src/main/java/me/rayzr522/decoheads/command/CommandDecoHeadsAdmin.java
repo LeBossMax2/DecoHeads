@@ -139,7 +139,7 @@ public class CommandDecoHeadsAdmin implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                Material itemType = Material.DIAMOND;
+                Material itemType = null;
                 if (args.length > 3) {
                 	itemType = Material.matchMaterial(args[3]);
                     if (itemType == null) {
@@ -158,7 +158,7 @@ public class CommandDecoHeadsAdmin implements CommandExecutor, TabCompleter {
                     }
                 }
                 
-                ItemStack cost = new ItemStack(itemType, count);
+                ItemStack cost = itemType == null ? null : new ItemStack(itemType, count);
 
                 ItemStack item = Compat.getItemInHand(player);
                 if (item == null || item.getType() != Material.SKULL_ITEM) {

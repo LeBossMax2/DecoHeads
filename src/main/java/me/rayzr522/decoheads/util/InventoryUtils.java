@@ -12,6 +12,7 @@ public class InventoryUtils {
     }
 
     public static void withdrawPlayer(Player player, ItemStack costStack) {
+    	costStack = costStack.clone();
     	for (ItemStack invStack : player.getInventory().getContents())
         {
             if (!costStack.isSimilar(invStack))

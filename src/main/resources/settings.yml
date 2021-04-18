@@ -3,6 +3,7 @@ custom-heads:
     enabled: true
     # The cost for custom heads that are retrieved by username.
     cost:
+    	==: org.bukkit.inventory.ItemStack
         type: DIAMOND
         amount: 10
 
@@ -13,6 +14,7 @@ price:
     show-free-heads: false
     # Default cost for heads. This is used when the cost of a head is set to -1.
     default-cost:
+    	==: org.bukkit.inventory.ItemStack
         type: DIAMOND
         amount: 1
 
