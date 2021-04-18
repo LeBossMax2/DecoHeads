@@ -75,19 +75,28 @@ public class CommandDecoHeads implements CommandExecutor, TabCompleter {
             ItemStack skull = makeSkull(username);
 
             ItemStack cost = plugin.getSettings().getCustomHeadsCost();
+            boolean priceEnable = plugin.getSettings().isPriceEnabled() && !ItemUtils.isInvalid(cost);
 
-            if (plugin.getSettings().isPriceEnabled() && !ItemUtils.isInvalid(cost)) {
-                if (InventoryUtils.canPlayerAfford(p, cost)) {
+            if (priceEnable) {
+                if (!InventoryUtils.canPlayerAfford(p, cost)) {
                     p.sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(cost)));
                     return true;
                 }
-                InventoryUtils.withdrawPlayer(p, cost);
-                p.sendMessage(plugin.tr("command.decoheads.get.given-cost", username, TextUtils.formatPrice(cost)));
-            } else {
-                p.sendMessage(plugin.tr("command.decoheads.get.given", username));
             }
 
-            p.getInventory().addItem(skull);
+            boolean giveSuccess = p.getInventory().addItem(skull).isEmpty();
+            if (giveSuccess) {
+	            if (priceEnable) {
+	                InventoryUtils.withdrawPlayer(p, cost);
+	                p.sendMessage(plugin.tr("command.decoheads.get.given-cost", username, TextUtils.formatPrice(cost)));
+	            }
+	            else {
+	                p.sendMessage(plugin.tr("command.decoheads.get.given", username));
+	            }
+            }
+            else {
+                p.sendMessage(plugin.tr("command.decoheads.get.no-space", username));
+            }
         } else if (sub.matches("\\d+")) {
             int page;
             try {

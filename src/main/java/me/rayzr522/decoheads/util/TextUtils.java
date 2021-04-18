@@ -38,6 +38,6 @@ public class TextUtils {
     }
 
     public static String formatPrice(ItemStack price) {
-        return DecoHeads.getInstance().tr(false, "price.price-format", price.getType(), price.getAmount());
+        return DecoHeads.getInstance().tr(false, "price.price-format", price.getType().name(), price.getAmount());
     }
 }

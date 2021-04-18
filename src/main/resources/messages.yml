@@ -22,6 +22,7 @@ command:
         get:
             usage: "Usage: &7/decoheads get <username>"
             no-username: "&cYou must specify a username!"
+            no-space: "&cYou don't have enough inventory space!"
             given: "Gave you the head of '{0}'"
             given-cost: "Gave you the head of '{0}' for {1}"
     decoheadsadmin:
@@ -52,7 +53,7 @@ command:
 
 price:
     # 3.7 money -> "$3.7"
-    price-format: "${0} x${1}"
+    price-format: "{0} x{1}"
     free: "free"
     not-enough-money: "&cYou don't have {0}!"
     failed: "&cFailed to withdraw {0}"

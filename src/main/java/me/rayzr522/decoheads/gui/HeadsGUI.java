@@ -174,18 +174,12 @@ public class HeadsGUI extends GUI {
 
     private void onClickHead(ClickEvent e, Head head) {
         DecoHeads plugin = DecoHeads.getInstance();
+        boolean priceEnable = head.hasCostFor(getPlayer()) && plugin.getSettings().isPriceEnabled();
 
-        if (head.hasCostFor(getPlayer()) && plugin.getSettings().isPriceEnabled()) {
-            if (InventoryUtils.canPlayerAfford(e.getPlayer(), head.computeCostFor(getPlayer()))) {
+        if (priceEnable) {
+            if (!InventoryUtils.canPlayerAfford(e.getPlayer(), head.computeCostFor(getPlayer()))) {
                 e.setShouldClose(true);
                 e.getPlayer().sendMessage(plugin.tr("price.not-enough-money", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
-                return;
-            }
-
-            boolean transactionSuccess = InventoryUtils.withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
-            if (!transactionSuccess) {
-                e.setShouldClose(true);
-                e.getPlayer().sendMessage(plugin.tr("price.failed", TextUtils.formatPrice(head.computeCostFor(getPlayer()))));
                 return;
             }
         }
@@ -204,7 +198,11 @@ public class HeadsGUI extends GUI {
             ItemUtils.setLore(giveItem, lore.split("\n"));
         }
 
-        e.getPlayer().getInventory().addItem(giveItem);
+        boolean giveSuccess = e.getPlayer().getInventory().addItem(giveItem).isEmpty();
+
+        if (giveSuccess && priceEnable) {
+            InventoryUtils.withdrawPlayer(e.getPlayer(), head.computeCostFor(getPlayer()));
+        }
     }
 
 }

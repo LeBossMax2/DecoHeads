@@ -11,11 +11,8 @@ public class InventoryUtils {
     	return player.getInventory().containsAtLeast(costStack, costStack.getAmount());
     }
 
-    public static boolean withdrawPlayer(Player player, ItemStack costStack) {
-    	if (!canPlayerAfford(player, costStack))
-    		return false;
-    	
-        for (ItemStack invStack : player.getInventory().getContents())
+    public static void withdrawPlayer(Player player, ItemStack costStack) {
+    	for (ItemStack invStack : player.getInventory().getContents())
         {
             if (!costStack.isSimilar(invStack))
             	continue;
@@ -34,6 +31,5 @@ public class InventoryUtils {
                 break;
             }
         }
-        return true;
     }
 }
