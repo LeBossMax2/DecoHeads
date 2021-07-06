@@ -89,6 +89,12 @@ public class CustomHead {
     }
     
     public static boolean isSkullSimilar(ItemStack s1, ItemStack s2) {
+        if (s1 == null || s2 == null)
+            return false;
+            
+        if (s1.getType() != s2.getType())
+            return false;
+        
     	if (s1.getType() != Material.SKULL_ITEM)
     		return false;
     	
@@ -141,18 +147,6 @@ public class CustomHead {
         		return false;
     	}
     	
-        try
-		{
-        	Object p1 = Reflector.getFieldValue(m1, "profile");
-			Object p2 = Reflector.getFieldValue(m2, "profile");
-			if (!p1.equals(p2))
-				return false;
-		}
-		catch (NoSuchFieldException | IllegalAccessException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
         return true;
     }
 }
